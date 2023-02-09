@@ -31,6 +31,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float dashingTime;
     [SerializeField] float dashingCD;
 
+    [Header("Sliding")]
+    [SerializeField] Transform wallCheck;
+    [SerializeField] Vector2 wallCheckBoxSize;
+    [SerializeField] LayerMask wallLayer;
+    [SerializeField] float slideSpeed;
+    bool isSliding = false;
+
     private float posisiScale;
 
     [SerializeField] Animator anim;
@@ -61,6 +68,8 @@ public class PlayerController : MonoBehaviour
         }else{
             anim.SetBool("IsRuning", false);
         }
+
+        Sliding();
     }
 
     private void FixedUpdate() {
@@ -88,9 +97,10 @@ public class PlayerController : MonoBehaviour
     void Jump(){
         if (IsGrounded()){
             dobelJump = dobelJumpValue;
+            anim.SetBool("Jump", false);
         }
         else{
-            anim.SetTrigger("Jump");
+            anim.SetBool("Jump", true);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()){
@@ -99,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
         else if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && dobelJump > 0){
             RB2D.velocity = Vector2.up * jumpForce;
-            anim.SetTrigger("Jump");
+            anim.SetBool("Jump", true);
             dobelJump--;
         }
     }
@@ -127,5 +137,31 @@ public class PlayerController : MonoBehaviour
         isDashing = false;
         yield return new WaitForSeconds(dashingCD);
         canDash = true;
+    }
+
+    bool IsWallTouched(){
+        return Physics2D.OverlapBox(wallCheck.position, wallCheckBoxSize, 0, wallLayer);
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(wallCheck.position, wallCheckBoxSize);
+    }
+
+    void Sliding(){
+        if (IsWallTouched() && !IsGrounded())
+        {
+            isSliding = true;
+            anim.SetTrigger("Sliding");
+            anim.SetBool("Jump", false);
+        }
+        else
+        {
+            isSliding = false;
+        }
+
+        if (isSliding){
+            RB2D.velocity = new Vector2(RB2D.velocity.x, Mathf.Clamp(RB2D.velocity.y, -slideSpeed, float.MaxValue));
+        }
     }
 }
