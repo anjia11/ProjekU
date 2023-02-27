@@ -13,7 +13,7 @@ TagManager:
   - UI
   - Ground
   - Player
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -40,4 +40,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2250071077
+    locked: 0
+  - name: PohonBelakang
+    uniqueID: 2194838055
+    locked: 0
+  - name: PohonDepan
+    uniqueID: 1916685229
+    locked: 0
+  - name: Tile
+    uniqueID: 620243789
+    locked: 0
+  - name: Semak
+    uniqueID: 1569422707
+    locked: 0
+  - name: Jalan
+    uniqueID: 2739850283
+    locked: 0
+  - name: Player
+    uniqueID: 602480101
     locked: 0
